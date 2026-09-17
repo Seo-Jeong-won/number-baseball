@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2455e6">
+  <meta name="description" content="스트라이크와 볼을 단서로 서로 다른 세 숫자를 맞히는 숫자 야구 게임.">
+  <title>숫자 야구 · Number Baseball</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%232455e6'/%3E%3Ctext x='24' y='35' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='34' fill='white'%3E3%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="game.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#guess-input">숫자 입력으로 바로가기</a>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="숫자 야구 홈">
+        <span class="brand-mark" aria-hidden="true">3</span>
+        <span>NUMBER BASEBALL</span>
+      </a>
+      <span class="header-note">세 자리 추리 게임</span>
+    </header>
+
+    <main>
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">숫자로 즐기는 작은 두뇌 게임</p>
+          <h1>숫자 야구<span class="title-dot">.</span></h1>
+          <p class="intro">스트라이크와 볼을 단서로, 숨겨진 세 숫자를 맞혀보세요.</p>
+        </div>
+        <button type="button" id="reset-button" class="button button-secondary">새 게임</button>
+      </div>
+
+      <div class="game-grid">
+        <section class="game-card" aria-labelledby="game-title">
+          <div class="secret-panel">
+            <div class="panel-topline">
+              <h2 id="game-title">숨겨진 숫자</h2>
+              <span class="round-label" id="round-label">도전 중</span>
+            </div>
+            <div id="secret-slots" class="secret-slots" role="img" aria-label="아직 공개되지 않은 세 자리 숫자">
+              <span class="secret-slot" aria-hidden="true">?</span>
+              <span class="secret-slot" aria-hidden="true">?</span>
+              <span class="secret-slot" aria-hidden="true">?</span>
+            </div>
+            <p>1부터 9까지 · 중복 없는 숫자 3개</p>
+          </div>
+
+          <div class="play-panel">
+            <form id="guess-form" novalidate>
+              <label for="guess-input">어떤 숫자일까요?</label>
+              <div class="input-row">
+                <input id="guess-input" name="guess" type="text" inputmode="numeric"
+                  autocomplete="off" autocapitalize="off" spellcheck="false"
+                  placeholder="예: 427" aria-describedby="input-hint feedback" required>
+                <button id="submit-button" class="button button-primary" type="submit">확인하기</button>
+              </div>
+              <p id="input-hint" class="input-hint">숫자 3자리를 입력한 뒤 Enter 키를 눌러도 좋아요.</p>
+            </form>
+            <p id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true">첫 번째 추리를 시작해보세요.</p>
+            <div class="attempt-summary">
+              <span>지금까지 시도</span>
+              <p><strong id="attempt-count">0</strong><span>회</span></p>
+            </div>
+          </div>
+        </section>
+
+        <section class="history-card" aria-labelledby="history-title">
+          <div class="history-heading">
+            <h2 id="history-title">시도 기록</h2>
+            <span class="history-note">최근 순</span>
+          </div>
+          <div id="empty-history" class="empty-history">
+            <span class="empty-symbol" aria-hidden="true">— — —</span>
+            <p>아직 시도한 숫자가 없어요.</p>
+            <span>첫 추리의 결과가 여기에 표시돼요.</span>
+          </div>
+          <div id="history-scroll" class="history-scroll" hidden tabindex="0" role="region" aria-label="시도 기록 목록">
+            <table>
+              <caption class="visually-hidden">최근 시도부터 표시되는 숫자 야구 결과</caption>
+              <thead><tr><th scope="col">차례</th><th scope="col">입력 숫자</th><th scope="col">결과</th></tr></thead>
+              <tbody id="history-body"></tbody>
+            </table>
+          </div>
+          <p class="history-footer">기록을 비교하면 다음 숫자가 보여요.</p>
+        </section>
+      </div>
+
+      <section class="rules" aria-labelledby="rules-title">
+        <h2 id="rules-title">이렇게 읽어보세요</h2>
+        <div class="rules-grid">
+          <div class="rule"><span class="rule-icon strike" aria-hidden="true">S</span><div><h3>스트라이크</h3><p>숫자와 위치가 모두 맞아요.</p></div></div>
+          <div class="rule"><span class="rule-icon ball" aria-hidden="true">B</span><div><h3>볼</h3><p>숫자는 맞지만 위치가 달라요.</p></div></div>
+          <div class="rule"><span class="rule-icon out" aria-hidden="true">0</span><div><h3>아웃</h3><p>일치하는 숫자가 하나도 없어요.</p></div></div>
+        </div>
+        <p class="rule-example">예를 들어 정답이 <b>427</b>일 때 <b>472</b>를 입력하면 <b>1스트라이크 2볼</b>. 3스트라이크면 성공!</p>
+      </section>
+      <noscript><p class="noscript">게임을 플레이하려면 브라우저에서 JavaScript를 켜주세요.</p></noscript>
+    </main>
+    <footer class="site-footer"><span>NUMBER BASEBALL</span><span>서두르지 말고, 한 자리씩.</span></footer>
+  </div>
+</body>
+</html>
